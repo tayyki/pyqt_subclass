@@ -1,0 +1,11 @@
+custom_qtreewidget
+------------------
+
+1.0.1
+-----
+* Conform and updated contents from qt4 to qt5
+
+1.0.0
+-----
+* Initial release
+* Ported from old repository 'pyqt_subclasses'
