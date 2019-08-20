@@ -1,0 +1,7 @@
+custom_qtreewidget
+------------------
+
+1.0.0
+-----
+* Initial release
+* Ported from old repository 'pyqt_subclasses'
