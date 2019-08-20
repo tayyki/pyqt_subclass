@@ -171,7 +171,14 @@ class CustomTreeWidget(QtGui.QTreeWidget):
     def add_new_parent_item(self):
         """Creation of new parent item."""
         input_text = self.add_item_dialog("Parent")
+        top_level_names = self.derive_top_level_names()
+
         if input_text:
+
+            if input_text in top_level_names:
+                print "'{0}' already exists!".format(input_text)
+                return
+
             CustomTreeWidgetItem(
                 self, input_text, is_tristate=True, is_new_item=True
             )
@@ -180,14 +187,24 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         """Creation of new child item, to be populated under parent item.
 
         Args:
-            base_node (QtGui.QTreeWidgetItem): Parent node for child item to be
+            base_node (CustomTreeWidgetItem): Parent node for child item to be
                 added into.
         """
         input_text = self.add_item_dialog("Sub")
+        child_item_names = self.derive_child_names_from_top_level(base_node)
+
         if input_text:
+
+            if input_text in child_item_names:
+                print "'{0}' already existed under {1}".format(
+                    input_text,
+                    base_node.text(0)
+                )
+                return
+
             it = CustomTreeWidgetItem(base_node, input_text, is_new_item=True)
-            # self.setItemExpanded(base_node, True) # This is only available in Qt4
-            base_node.setExpanded(True)
+            self.setItemExpanded(base_node, True) # This is only available in Qt4
+            # base_node.setExpanded(True)
             it.setData(0, IsNewItemRole, True)
 
     def is_top_level_item(self):
@@ -200,7 +217,6 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         if self.currentItem().parent():
             result = False
         return result
-
 
     def remove_selected_item(self):
         """Removes entry in TreeWidget.
@@ -232,7 +248,7 @@ class CustomTreeWidget(QtGui.QTreeWidget):
 
             return item_name
 
-    def get_child_count(self):
+    def get_selected_child_count(self):
         """Derive number of child items under top-level item.
 
         Returns:
@@ -242,6 +258,36 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         if get_selected:
             base_node = get_selected[0]
             return base_node.childCount()
+
+    def derive_top_level_names(self):
+        """Derive top-level items' names.
+
+        Returns:
+            list(str): List of top-level items' name.
+        """
+        root_item = self.invisibleRootItem()
+        top_level_count = root_item.childCount()
+        top_item_names = []
+
+        for num in range(top_level_count):
+            top_item_names.append(root_item.child(num).text(0))
+
+        return top_item_names
+
+    def derive_child_names_from_top_level(self, base_node):
+        """Derive child items' names from given top-level item.
+
+        Args:
+            base_node (CustomTreeWidgetItem): Selected parent node.
+
+        Returns:
+            list(str): List of child items' name found within the parent node.
+        """
+        child_count = base_node.childCount()
+        child_names = []
+        for num in range(child_count):
+            child_names.append(base_node.child(num).text(0))
+        return child_names
 
     def derive_tree_items(self, mode="all"):
         """Derive items based on specified mode chosen.
@@ -496,28 +542,15 @@ class MainApp(QtGui.QWidget):
     ########################################################################
 
     def button1_test(self):
-        # Get current selected in list widget
-        # CustomTreeWidgetItem(self._tree, "test", is_tristate=True)
-        self._tree.add_new_parent_item()
+        print '>>> Button1 test'
 
     def button2_test(self):
-        if not self._diff_highlight:
-            self._tree_delegate.text_color = QtGui.QColor(255, 0, 0)
-            self._diff_highlight = True
-        else:
-            # Reset it back
-            self._tree_delegate.text_color = QtGui.QColor()
-            self._diff_highlight = False
-        
-        self._tree.viewport().update()
-        
+        print '>>> Button2 test'
 
 
 
 
 if __name__ == "__main__":
-    #main()
-
     app = QtGui.QApplication(sys.argv)
     w = MainApp()
     w.show()
