@@ -1,6 +1,12 @@
 custom_qtreewidget
 ------------------
 
+1.0.2
+-----
+* Added in renaming functionalities.
+* Moved default signals into the subclass instead.
+* Added temp methods for multi-selection but not implemented (requires more testing)
+
 1.0.1
 -----
 * Conform and updated contents from qt4 to qt5
