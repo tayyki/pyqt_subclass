@@ -1,5 +1,6 @@
 # from qtswitch import QtGui, QtCore
 import sys
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from collections import defaultdict, OrderedDict
 from functools import partial
@@ -24,10 +25,8 @@ Expected layout:
 IsNewItemRole = QtCore.Qt.UserRole + 1000
 IsPageRole = QtCore.Qt.UserRole + 2000
 
-EntityInfoRole = QtCore.Qt.UserRole + 500
 
-
-class CustomTreeDelegate(QtGui.QStyledItemDelegate):
+class CustomTreeDelegate(QtWidgets.QStyledItemDelegate):
     # https://stackoverflow.com/questions/57486888/derive-and-set-color-to-the-index-of-newly-added-children
     @property
     def text_color(self):
@@ -55,14 +54,14 @@ class CustomTreeDelegate(QtGui.QStyledItemDelegate):
         """
         super(CustomTreeDelegate, self).initStyleOption(option, index)
         if self.text_color.isValid() and index.data(IsNewItemRole):
-            option.palette.setBrush(QtGui.QtGui.Text, self.text_color)
+            option.palette.setBrush(QtWidgets.QtGui.Text, self.text_color)
 
 
-class CustomTreeWidgetItem(QtGui.QTreeWidgetItem):
+class CustomTreeWidgetItem(QtWidgets.QTreeWidgetItem):
     """Initialization class for QTreeWidgetItem creation.
 
     Args:
-        widget (QtGui.QTreeWidget): To append items into.
+        widget (QtWidgets.QTreeWidget): To append items into.
         text (str): Input name for QTreeWidgetItem.
         is_tristate (bool): Should it be a tri-state checkbox. False by default.
     """
@@ -106,7 +105,7 @@ class CustomTreeWidgetItem(QtGui.QTreeWidgetItem):
             value (int or unicode): 
         """
         state = self.checkState(column)
-        QtGui.QTreeWidgetItem.setData(self, column, role, value)
+        QtWidgets.QTreeWidgetItem.setData(self, column, role, value)
         if (role == QtCore.Qt.CheckStateRole and
                 state != self.checkState(column)):
             tree_widget = self.treeWidget()
@@ -114,16 +113,16 @@ class CustomTreeWidgetItem(QtGui.QTreeWidgetItem):
                 tree_widget.itemToggled.emit(self, column)
 
 
-class CustomTreeWidget(QtGui.QTreeWidget):
+class CustomTreeWidget(QtWidgets.QTreeWidget):
     """Initialization class for QTreeWidget creation.
 
     Args:
         widget ():
     """
-    itemToggled = QtCore.pyqtSignal(QtGui.QTreeWidgetItem, bool)
+    itemToggled = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem, bool)
 
     selectionItemChanged = QtCore.pyqtSignal(bool)
-    contentsUpdate = QtCore.pyqtSignal()
+    contentUpdates = QtCore.pyqtSignal()
 
     def __init__(self, widget=None):
         super(CustomTreeWidget, self).__init__(widget)
@@ -169,9 +168,9 @@ class CustomTreeWidget(QtGui.QTreeWidget):
             self.rename_counter = False
             item.setData(0, IsNewItemRole, True)
 
-            self.contentsUpdate.emit()
+            self.contentUpdates.emit()
 
-        #>>> TODO - To do a double take where `contentsUpdate` may not be
+        #>>> TODO - To do a double take where `contentUpdates` may not be
         # emitting correctly.
         elif item.data(column, IsNewItemRole):
             # print '>>> item is already an newitemrole'
@@ -206,24 +205,24 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         if base_node is None:
             return
 
-        qmenu = QtGui.QMenu(self)
-        remove_action = QtGui.QAction("Remove item", self)
+        qmenu = QtWidgets.QMenu(self)
+        remove_action = QtWidgets.QAction("Remove item", self)
         remove_action.triggered.connect(self.remove_selected_item)
         qmenu.addAction(remove_action)
 
         #>>>
-        move_up_action = QtGui.QAction("Move Up", self)
+        move_up_action = QtWidgets.QAction("Move Up", self)
         move_up_action.triggered.connect(partial(self.move_item, direction="up"))
         qmenu.addAction(move_up_action)
 
-        move_down_action = QtGui.QAction("Move down", self)
+        move_down_action = QtWidgets.QAction("Move down", self)
         move_down_action.triggered.connect(partial(self.move_item, direction="down"))
         qmenu.addAction(move_down_action)
 
         # The following options are only effected for top-level items
         # top-level items do not have `parent()`
         if base_node.parent() is None:
-            add_new_child_action = QtGui.QAction("Add new sub item", self)
+            add_new_child_action = QtWidgets.QAction("Add new sub item", self)
             add_new_child_action.triggered.connect(
                 partial(self.add_new_child_item, base_node)
             )
@@ -233,7 +232,7 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         qmenu.exec_(self.mapToGlobal(pos))
 
     def move_item(self, direction=""):
-        """Move selected item up/ down the index order as defined by User.
+        """Move selected item up.
 
         If top-level item is selected, the child items within will be moved
         along with it.
@@ -293,6 +292,7 @@ class CustomTreeWidget(QtGui.QTreeWidget):
 
         self.setCurrentItem(selected_item)
 
+
     def add_item_dialog(self, title):
         """Input dialog for creation of new Parent or Sub items.
 
@@ -303,7 +303,7 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         Returns:
             str: Name of new created item.
         """
-        text, ok = QtGui.QInputDialog.getText(
+        text, ok = QtWidgets.QInputDialog.getText(
             self,
             "Add {0} Item".format(title),
             "Enter name for {0}-Item:".format(title)
@@ -366,15 +366,13 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         return result
 
     def remove_selected_item(self):
-        """Removes selected entry in TreeWidget.
+        """Removes entry in TreeWidget.
 
         This method applies to both parent and child items.
         """
         root = self.invisibleRootItem()
         for item in self.selectedItems():
             (item.parent() or root).removeChild(item)
-
-        self.contentsUpdate.emit()
 
     def get_selected_text(self):
         """Get the text naming of selected item.
@@ -384,18 +382,18 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         naming, eg. 'parentName/childName'.
 
         Retuns:
-            str or None: Name of selected item.
+            str: Name of selected item.
         """
-        current_item = self.currentItem()
-        if current_item:
-            item_name = current_item.text(0)
+        # get_selected = self.selectedItems()
+        get_selected = self.currentItem()
+        if get_selected:
+            # base_node = get_selected[0]
+            # item_name = base_node.text(0)
+            item_name = get_selected.text(0)
 
             # When child-item is selected
-            if current_item.parent():
-                item_name = "{0}/{1}".format(
-                    current_item.parent().text(0),
-                    item_name
-                )
+            if get_selected.parent():
+                item_name = "{0}/{1}".format(get_selected.parent().text(0), item_name)
 
             return item_name
 
@@ -405,9 +403,9 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         Returns:
             int: Number of child items found under parent.
         """
-        current_item = self.currentItem()
-        if current_item:
-            base_node = current_item[0]
+        get_selected = self.selectedItems()
+        if get_selected:
+            base_node = get_selected[0]
             return base_node.childCount()
 
     def derive_top_level_names(self):
@@ -452,7 +450,7 @@ class CustomTreeWidget(QtGui.QTreeWidget):
 
         Returns:
             dict: Contains names of top-level items and its sub items. Contents
-                are returned in ordered placement as defined by User.
+                are returned in ordered placement as seen in 
 
                 ..code-block:: json
                         {
@@ -471,15 +469,15 @@ class CustomTreeWidget(QtGui.QTreeWidget):
         root_item = self.invisibleRootItem()
         top_level_count = root_item.childCount()
 
-        for top_num in range(top_level_count):
-            top_level_item = root_item.child(top_num)
+        for i in range(top_level_count):
+            top_level_item = root_item.child(i)
             top_level_item_name = str(top_level_item.text(0))
-            child_count = top_level_item.childCount()
+            child_num = top_level_item.childCount()
 
             all_items[top_level_item_name] = []
 
-            for child_num in range(child_count):
-                child_item = top_level_item.child(child_num)
+            for n in range(child_num):
+                child_item = top_level_item.child(n)
                 child_item_name = str(child_item.text(0)) or ""
 
                 if mode == "all":
@@ -528,31 +526,22 @@ class CustomTreeWidget(QtGui.QTreeWidget):
 
     #TBC
     def make_checkbox_more_visible(self):
-        """Background color of the QTreeWidget are changed to conform to Maya
-        standards. As such, the outline of the checkboxes are black in color,
-        blending in with the almost black background. Thus making it hard to
-        visualize if there is a checkbox.
+        """In Maya, the background color of the QTreeWidget are changed to conform
+        to Maya standards. Adding on, as the outline of the checkboxes are black
+        in color in which it is bledning in with Maya (almost black) background
+        that makes it hard to visualize if there is a checkbox.
 
         This method will cause the outline color to appear in white.
         """
         # https://stackoverflow.com/questions/54655382/change-the-style-of-a-checkbox-in-a-qtreewidget-without-affecting-the-check-mark
-        file_tree_palette = QtGui.QtGui()
-        file_tree_palette.setColor(QtGui.QtGui.Window, QtGui.QColor(255, 255, 255))
-        # file_tree_palette.setColor(QtGui.QtGui.Base, QtGui.QColor(30, 30, 30))
-        # file_tree_palette.setColor(QtGui.QtGui.Highlight, QtGui.QColor(93, 93, 93))
+        file_tree_palette = QtWidgets.QtGui()
+        file_tree_palette.setColor(QtWidgets.QtGui.Window, QtGui.QColor(255, 255, 255))
+        # file_tree_palette.setColor(QtWidgets.QtGui.Base, QtGui.QColor(30, 30, 30))
+        # file_tree_palette.setColor(QtWidgets.QtGui.Highlight, QtGui.QColor(93, 93, 93))
         self.setPalette(file_tree_palette)
 
     #TBC
     def move_item_multi(self, direction=""):
-        """Move multiple items up/ down the index order as defined by User.
-
-        >>> NOTE: Not yet try when a parent and a child/children of different
-        parents are selected.
-        
-        Args:
-            direction (str): Either 'up' or 'down'. Denotes the direction of
-                the new item placement.
-        """
         # only if multi selection is set
         selected = self.selectedItems()
         for s in selected:
@@ -586,18 +575,18 @@ class CustomTreeWidget(QtGui.QTreeWidget):
 
 ### without subclass ###
 def main_without_subclass(): 
-    app = QtGui.QApplication(sys.argv)
-    tree = QtGui.QTreeWidget ()
-    headerItem  = QtGui.QTreeWidgetItem()
-    item    = QtGui.QTreeWidgetItem()
+    app = QtWidgets.QApplication(sys.argv)
+    tree = QtWidgets.QTreeWidget ()
+    headerItem  = QtWidgets.QTreeWidgetItem()
+    item    = QtWidgets.QTreeWidgetItem()
 
     for i in xrange(3):
-        parent = QtGui.QTreeWidgetItem(tree)
+        parent = QtWidgets.QTreeWidgetItem(tree)
         parent.setText(0, "Parent {}".format(i))
         parent.setFlags(parent.flags() | QtCore.Qt.ItemIsTristate | QtCore.Qt.ItemIsUserCheckable)
         
         for x in xrange(5):
-            child = QtGui.QTreeWidgetItem(parent)
+            child = QtWidgets.QTreeWidgetItem(parent)
             child.setFlags(child.flags() | QtCore.Qt.ItemIsUserCheckable)
             child.setText(0, "Child {}".format(x))
             child.setCheckState(0, QtCore.Qt.Unchecked)
@@ -608,8 +597,8 @@ def main_without_subclass():
 
 ### with subclass ###
 def main():
-    app = QtGui.QApplication(sys.argv)
-    tree = QtGui.QTreeWidget()
+    app = QtWidgets.QApplication(sys.argv)
+    tree = QtWidgets.QTreeWidget()
     tree.header().hide()
 
     for i in xrange(3):
@@ -625,7 +614,7 @@ def main():
     sys.exit(app.exec_())
 
 
-class MainApp(QtGui.QWidget):
+class MainApp(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(MainApp, self).__init__(parent)
 
@@ -644,6 +633,9 @@ class MainApp(QtGui.QWidget):
             },
         }
         # test_dict = {}
+
+        # self.rename_counter = False
+        # self._startup = False
         # self.prev_name = None
         self._diff_highlight = False
         self._tree = CustomTreeWidget()
@@ -653,7 +645,7 @@ class MainApp(QtGui.QWidget):
 
         # QTreeWidget default signals override
         self._tree.selectionItemChanged.connect(self.check_selection)
-        self._tree.contentsUpdate.connect(self.update_dictionary)
+        self._tree.contentUpdates.connect(self.update_dictionary)
 
         # for pk, pv in sorted(test_dict.items()):
         #     parent = CustomTreeWidgetItem(self._tree, pk, is_tristate=True)
@@ -671,30 +663,30 @@ class MainApp(QtGui.QWidget):
         # Expand the hierarchy by default
         self._tree.expandAll()
         #>>> only if multi-selection is required
-        # self._tree.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+        # self._tree.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
 
-        add_items_layout = QtGui.QHBoxLayout()
-        self.add_parent_btn = QtGui.QPushButton("Add Parent")
-        self.add_child_btn = QtGui.QPushButton("Add Child")
+        add_items_layout = QtWidgets.QHBoxLayout()
+        self.add_parent_btn = QtWidgets.QPushButton("Add Parent")
+        self.add_child_btn = QtWidgets.QPushButton("Add Child")
         add_items_layout.addWidget(self.add_parent_btn)
         add_items_layout.addWidget(self.add_child_btn)
 
-        tree_layout = QtGui.QVBoxLayout()
-        self.btn1 = QtGui.QPushButton("TEST BTN1")
-        self.btn2 = QtGui.QPushButton("TEST BTN2")
+        tree_layout = QtWidgets.QVBoxLayout()
+        self.btn1 = QtWidgets.QPushButton("TEST BTN1")
+        self.btn2 = QtWidgets.QPushButton("TEST BTN2")
         tree_layout.addWidget(self._tree)
         tree_layout.addLayout(add_items_layout)
         tree_layout.addWidget(self.btn1)
         tree_layout.addWidget(self.btn2)
 
 
-        self.list_widget = QtGui.QListWidget()
+        self.list_widget = QtWidgets.QListWidget()
         aaa = ['a', 'b', 'c']
         for a in aaa:
             self.list_widget.addItem(a)
 
 
-        main_layout = QtGui.QHBoxLayout()
+        main_layout = QtWidgets.QHBoxLayout()
         main_layout.addLayout(tree_layout)
         main_layout.addWidget(self.list_widget)
         
@@ -702,6 +694,8 @@ class MainApp(QtGui.QWidget):
         self.setLayout(main_layout)
 
         self.setup_connections()
+
+        self._startup = True
         self.initial_selection()
 
         if not test_dict:
@@ -723,14 +717,17 @@ class MainApp(QtGui.QWidget):
         if root_item.childCount():
             self._tree.setCurrentItem(root_item.child(0))
 
+
     def add_parent_item(self):
         self._tree.add_new_parent_item()
 
     def add_child_item(self):
         self._tree.add_new_child_item(self._tree.currentItem())
 
+
     def highlight_new_items(self):
-        """Highlight new added items upon toggle."""
+        """Highlight new added items upon toggle.
+        """
         if not self._diff_highlight:
             self._tree_delegate.text_color = QtGui.QColor(255, 0, 0)
             self._diff_highlight = True
@@ -745,7 +742,7 @@ class MainApp(QtGui.QWidget):
         self.add_child_btn.setEnabled(value)
 
     def update_dictionary(self):
-        print ('>>> update: ', self._tree.derive_tree_items())
+        # print '>>> update: ', self._tree.derive_tree_items()
         return self._tree.derive_tree_items()
 
 
@@ -760,7 +757,7 @@ class MainApp(QtGui.QWidget):
 
         for pk, pv in aaa.items():
             base_qmenu = QCustomMenu(title=pk, parent=self)
-            test_action = QtGui.QAction(pk, self)
+            test_action = QtWidgets.QAction(pk, self)
             test_action.setMenu(base_qmenu)
             self.qmenu.addAction(test_action)
 
@@ -768,7 +765,9 @@ class MainApp(QtGui.QWidget):
                 action = QSubAction(v, self)
                 base_qmenu.addAction(action)
 
-        self.qmenu.exec_(QtGui.QCursor.pos())
+        self.qmenu.exec_(QtWidgets.QCursor.pos())
+
+
 
     def button2_test(self):
         # print '>>> Button2 test'
@@ -778,15 +777,14 @@ class MainApp(QtGui.QWidget):
         print (aaa)
 
 
-
-class QSubAction(QtGui.QAction):
+class QSubAction(QtWidgets.QAction):
     def __init__(self, text="", parent=None):
         super(QSubAction, self).__init__(text, parent)
         self.setCheckable(True)
         self.setChecked(True)
 
 
-class QCustomMenu(QtGui.QMenu):
+class QCustomMenu(QtWidgets.QMenu):
     """Customized QMenu."""
 
     def __init__(self, title, parent=None):
@@ -801,7 +799,7 @@ class QCustomMenu(QtGui.QMenu):
         elif isinstance(action,QSubAction):
             action.toggle()
             return
-        return QtGui.QMenu.mousePressEvent(self,event)
+        return QtWidgets.QMenu.mousePressEvent(self,event)
     def setup_menu(self):
         self.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
 
@@ -818,7 +816,7 @@ class QCustomMenu(QtGui.QMenu):
 
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = MainApp()
     w.show()
     sys.exit(app.exec_())
