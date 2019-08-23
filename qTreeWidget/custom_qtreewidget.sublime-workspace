@@ -1,0 +1,449 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"add_child_",
+				"add_child_btn"
+			],
+			[
+				"tree",
+				"tree_layout"
+			],
+			[
+				"add",
+				"add_new_child_item"
+			],
+			[
+				"add_",
+				"add_items_layout"
+			],
+			[
+				"add_chi",
+				"add_child_item"
+			],
+			[
+				"add_pare",
+				"add_parent_item"
+			],
+			[
+				"add_new",
+				"adds_new_child_item"
+			],
+			[
+				"base",
+				"base_node"
+			],
+			[
+				"main",
+				"main_menu"
+			],
+			[
+				"sub",
+				"sub_chk"
+			],
+			[
+				"user_se",
+				"user_selections"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "custom_qtreewidget_Qt5Compatible.py",
+			"settings":
+			{
+				"buffer_size": 18886,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "custom_qtreewidget_Qt4Compatible.py",
+			"settings":
+			{
+				"buffer_size": 18766,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "withRenaming_toBeModified.py",
+			"settings":
+			{
+				"buffer_size": 27646,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"plugin",
+				"Plugin Development: Profile Events"
+			],
+			[
+				"packa",
+				"Package Control: Add Repository"
+			],
+			[
+				"disa",
+				"Package Control: Disable Package"
+			],
+			[
+				"insl",
+				"Package Control: Install Package"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: Enable Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 131.0,
+		"history":
+		[
+			"view.run_command(\"LineCountUpdateListener\")",
+			"view.run_comand(\"LineCountUpdateListener\")",
+			"view.run(\"LineCountUpdateListener\")"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/tayyk/Desktop/github_tayyki/pyqt_subclass/qTreeWidget/custom_qtreewidget_Qt5Compatible.py",
+		"/C/Users/tayyk/Desktop/devs/custom_qtreewidget_Qt5Compatible.py",
+		"/C/Users/tayyk/Desktop/devs/test_run.py",
+		"/C/Users/tayyk/Desktop/devs/README.md",
+		"/C/Users/tayyk/Desktop/devs/custom_qtreewidget_modi.py",
+		"/C/Users/tayyk/Desktop/devs/custom_qlistwidget.py",
+		"/C/Users/tayyk/Desktop/devs/.git/COMMIT_EDITMSG",
+		"/C/Users/tayyk/Desktop/devs/.git/rebase-merge/git-rebase-todo",
+		"/C/Users/tayyk/Desktop/devs/custom_qtreewidget.py",
+		"/C/Program Files/Sublime Text 3/Packages/Python.sublime-package",
+		"/C/Users/tayyk/Downloads/PyQt5_gpl-5.13.0/README",
+		"/C/Users/tayyk/Desktop/devs/custom_qtreewidget.project.sublime-project",
+		"/C/Users/tayyk/AppData/Roaming/Sublime Text 3/Packages/User/lines_count.py",
+		"/C/Users/tayyk/Downloads/main.py",
+		"/C/Users/tayyk/Downloads/tabs_modi.py",
+		"/C/Users/tayyk/Downloads/tabs.py",
+		"/C/Users/tayyk/Desktop/test.py",
+		"/C/Users/tayyk/Downloads/character_constrainer.py",
+		"/C/Users/tayyk/Downloads/character_constrainer_utils.py",
+		"/C/Users/tayyk/Desktop/pip.py"
+	],
+	"find":
+	{
+		"height": 40.4
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"class customtreew",
+			"QtWidgets",
+			"my_test",
+			"my_tes",
+			".par",
+			"CustomTreeDelegate",
+			"QCo",
+			"QColo",
+			"add_new_parent_item",
+			"add_parent_item",
+			"add_new_child_item",
+			"adds_new_child_item",
+			"current",
+			"currentItem",
+			"setItemExpanded",
+			"adds_new_child_item",
+			"adds_new",
+			"add_new",
+			"QPal",
+			"adds_new",
+			"setItemExpanded",
+			"adds_new_child_item",
+			"QColor",
+			"QtGui",
+			"QColor",
+			"isnew",
+			"CustomTreeDelegate",
+			"signal",
+			"QtGui",
+			".parent",
+			"get_",
+			"aaa",
+			"        .",
+			"aaa",
+			"_tree",
+			"QtWidget",
+			"QtGui"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"QtGui",
+			"check_current_selection",
+			"add_new_child_item",
+			"QtWidgets",
+			"QtWidget"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "custom_qtreewidget_Qt5Compatible.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18886,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								16952,
+								16952
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6752.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 1,
+					"file": "custom_qtreewidget_Qt4Compatible.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18766,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6626.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "withRenaming_toBeModified.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 27646,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3988,
+								3988
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1339.2,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 36.4
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 205.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/Python/Python.sublime-build",
+	"project": "custom_qtreewidget.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 1,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
