@@ -29,10 +29,20 @@ EntityInfoRole = QtCore.Qt.UserRole + 500
 
 
 class CustomTreeDelegate(QtWidgets.QStyledItemDelegate):
+    """
+    
+    Set apporiate color to text so as to highlight new/ modified items.
+    """
     # https://stackoverflow.com/questions/57486888/derive-and-set-color-to-the-index-of-newly-added-children
     @property
     def text_color(self):
-        """
+        """Sets text color to QTreeWidgetItem.
+
+        If QTreeWidgetItem do not have `_text_color` attribute, default
+        color will be used.
+
+        Returns:
+            QtGui.QColor: RGB color values.
         """
         if not hasattr(self, "_text_color"):
             self._text_color = QtGui.QColor()
@@ -48,7 +58,11 @@ class CustomTreeDelegate(QtWidgets.QStyledItemDelegate):
         self._text_color = color
 
     def initStyleOption(self, option, index):
-        """Change the font color only if item is a new added item.
+        """Change font color to red if it fulfills certain conditions.
+        
+        Conditions for item(s) to be colored in Red:
+            * Newly-Added item
+            * Modified item (ie. when item is renamed)
 
         Args:
             option ():
@@ -63,11 +77,12 @@ class CustomTreeWidgetItem(QtWidgets.QTreeWidgetItem):
     """Initialization class for QTreeWidgetItem creation.
 
     Args:
-        widget (QtWidgets.QTreeWidget): To append items into.
+        parent (QtWidgets.QTreeWidget or None): QTreeWidget to add the items into.
         text (str): Input name for QTreeWidgetItem.
         is_tristate (bool): Should it be a tri-state checkbox. False by default.
+        is_new_item (bool): If it is a new item. False by default.
     """
-    def __init__(self, parent=None, text=None, is_tristate=False, is_new_item=False):
+    def __init__(self, parent=None, text="", is_tristate=False, is_new_item=False):
         super(CustomTreeWidgetItem, self).__init__(parent)
 
         self.setText(0, text)
@@ -102,9 +117,9 @@ class CustomTreeWidgetItem(QtWidgets.QTreeWidgetItem):
 
         Args:
             column (int): Column value of item.
-            role (int): Value of Qt.ItemDataRole. It will be Qt.DisplayRole or
-                Qt.CheckStateRole
-            value (int or unicode): 
+            role (int): Value of Qt.ItemDataRole. It can be Qt.DisplayRole or
+                Qt.CheckStateRole.
+            value (int or unicode): ???
         """
         state = self.checkState(column)
         QtWidgets.QTreeWidgetItem.setData(self, column, role, value)
@@ -119,7 +134,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
     """Initialization class for QTreeWidget creation.
 
     Args:
-        widget ():
+        widget (None):
     """
     itemToggled = QtCore.pyqtSignal(QtWidgets.QTreeWidgetItem, bool)
 
@@ -131,6 +146,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
 
         self.rename_counter = False
 
+        # Context menu for QTreeWidgetItem
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_custom_menu)
 
@@ -147,7 +163,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
         If a child item is selected, the "Add Child" button will be disabled.
 
         Args:
-            current (CustomTreeWidgetItem): Currently selected item.
+            current (CustomTreeWidgetItem): Current selected item.
             previous (CustomTreeWidgetItem or None): Previous selected item.
         """
         state = True
@@ -165,8 +181,8 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
             item (CustomTreeWidgetItem): Selected item.
             column (int): Column value of the selected item.
         """
+        # If renaming does occurs, set the TreeWidgetItem to have IsNewItemRole
         if self.rename_counter and self.prev_name != item.text(column):
-            # print '>>> renaming performed..'
             self.rename_counter = False
             item.setData(0, IsNewItemRole, True)
 
@@ -202,7 +218,15 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
         self.rename_counter = True
 
     def show_custom_menu(self, pos):
-        """Display custom context menu."""
+        """Display custom context menu on CustomTreeWidgetItem.
+
+        There are 2 sets of context menus depending on the hierarichal level
+        of the QTreeWidgetItem.
+        
+        Args:
+            pos (QtCore.QPoint): Mouse cursor position when performing right-
+                click action.
+        """
         base_node = self.itemAt(pos)
         if base_node is None:
             return
